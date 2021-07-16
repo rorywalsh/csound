@@ -35,8 +35,10 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Moving build to artifacts directory
-        run: chmod +x ../../installer/macosx/release-build-github-action.sh
+        working-directory: .
+        run: chmod +x ./installer/macosx/release-build-github-action.sh
       - name: Build using installer script
-        run: ../../installer/macosx/release-build-github-action.sh 
+        working-directory: .
+        run: ./installer/macosx/release-build-github-action.sh 
         
 

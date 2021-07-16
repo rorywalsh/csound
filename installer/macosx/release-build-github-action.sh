@@ -51,6 +51,7 @@ export PACKAGE_NAME=csound${CS_VERSION}-MacOS_x86_64.pkg
 export DMG_DIR="Csound${CS_VERSION}"
 export DMG_NAME="csound${CS_VERSION}-MacOS_x86_64.dmg"
 
+xcode-select --install
 export SDK=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/
 export TARGET=10.10
 export DEPS_BASE=/usr/local

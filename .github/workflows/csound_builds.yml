@@ -31,3 +31,11 @@ jobs:
         with:
           name: csound-android-6.16.1.zip 
           path: .
+  macos-build:
+    runs-on: macos-latest
+    steps:
+      - name: Moving build to artifacts directory
+        run: chmod +x ./installer/macosx/release-build-azure.sh
+      - name: Build using installer script
+        run: ./installer/macosx/release-build-github-action.sh        
+

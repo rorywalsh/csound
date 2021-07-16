@@ -36,7 +36,8 @@ jobs:
     steps:
       - name: Changin permission of build script
         working-directory: .
-        run: pwd && ls && chmod +x ./installer/macosx/release-build-github-action.sh
+        run: pwd && ls 
+#         && chmod +x ./installer/macosx/release-build-github-action.sh
       - name: Build using installer script
         working-directory: .
         run: ./installer/macosx/release-build-github-action.sh 

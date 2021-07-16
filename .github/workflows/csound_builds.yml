@@ -37,7 +37,7 @@ jobs:
       - uses: actions/checkout@v1
       - name: Changin permission of build script
         env:
-          CC: 8
+          CC: gcc-4.2
         working-directory: .
         run: chmod +x ./installer/macosx/release-build-github-action.sh
       - name: Build using installer script

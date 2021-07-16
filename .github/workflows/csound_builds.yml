@@ -34,6 +34,7 @@ jobs:
   macos-build:
     runs-on: macos-latest
     steps:
+      - uses: actions/checkout@v1
       - name: Changin permission of build script
         working-directory: .
         run: "ls -l" 

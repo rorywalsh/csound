@@ -40,6 +40,6 @@ jobs:
         run: chmod +x ./installer/macosx/release-build-github-action.sh
       - name: Build using installer script
         working-directory: .
-        run: ./installer/macosx/release-build-github-action.sh 
+        run: ./installer/macosx/release-build-github-action.sh develop
         
 

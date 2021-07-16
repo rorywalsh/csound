@@ -37,10 +37,9 @@ jobs:
       - uses: actions/checkout@v1
       - name: Changin permission of build script
         working-directory: .
-        run: "ls -l" 
-#         && chmod +x ./installer/macosx/release-build-github-action.sh
-#       - name: Build using installer script
-#         working-directory: .
-#         run: ./installer/macosx/release-build-github-action.sh 
+        run: chmod +x ./installer/macosx/release-build-github-action.sh
+      - name: Build using installer script
+        working-directory: .
+        run: ./installer/macosx/release-build-github-action.sh 
         
 

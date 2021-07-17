@@ -33,7 +33,8 @@ jobs:
           path: .
   macos-build:
     runs-on: macos-latest
-    
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_11.2.app/Contents/Developer
     steps:
       - run: sudo xcode-select --reset
       - uses: actions/checkout@v1

@@ -1,5 +1,7 @@
 #!/bin/sh
 
+brew update
+brew upgrade
 brew install libsndfile
 brew install portaudio
 brew install liblo

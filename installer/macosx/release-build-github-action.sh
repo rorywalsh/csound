@@ -1,5 +1,9 @@
 #!/bin/sh
 
+
+sudo rm -rf /Library/Developer/CommandLineTools
+xcode-select --install
+
 brew install libsndfile
 brew install portaudio
 brew install liblo
@@ -59,8 +63,6 @@ export SDK=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/
 export TARGET=10.10
 export DEPS_BASE=/usr/local
 
-sudo rm -rf /Library/Developer/CommandLineTools
-xcode-select --install
 # If arg2 passed in, will cd into that dir and rebuild, otherwise
 # will clone from repo and do a fresh build
 

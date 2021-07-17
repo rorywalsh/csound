@@ -59,9 +59,8 @@ export SDK=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/
 export TARGET=10.10
 export DEPS_BASE=/usr/local
 
-export CPATH='/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include:/opt/local/include'
-export LIBRARY_PATH='/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib:/opt/local/lib'
-
+sudo rm -rf /Library/Developer/CommandLineTools
+xcode-select --install
 # If arg2 passed in, will cd into that dir and rebuild, otherwise
 # will clone from repo and do a fresh build
 

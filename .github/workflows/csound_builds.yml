@@ -36,7 +36,7 @@ jobs:
     env:
       DEVELOPER_DIR: /Applications/Xcode_11.app/Contents/Developer
     steps:
-      - run: sudo xcode-select --switch /Applications/Xcode_11.app
+      - run: sudo xcode-select --reset
       - uses: actions/checkout@v1
       - name: Changin permission of build script
         working-directory: .

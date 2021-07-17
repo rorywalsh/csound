@@ -33,11 +33,12 @@ jobs:
           path: .
   macos-build:
     runs-on: macos-latest
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_11.app/Contents/Developer
     steps:
       - uses: actions/checkout@v1
       - name: Changin permission of build script
-        env:
-          DEVELOPER_DIR: /Applications/Xcode_11.app/Contents/Developer
+
         working-directory: .
         run: chmod +x ./installer/macosx/release-build-github-action.sh
       - name: uninstall command line tools

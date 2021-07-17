@@ -3,6 +3,7 @@
 
 sudo rm -rf /Library/Developer/CommandLineTools
 xcode-select --install
+xcode-select -s /Applications/Xcode.app
 
 brew install libsndfile
 brew install portaudio

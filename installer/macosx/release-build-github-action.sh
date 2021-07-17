@@ -1,7 +1,5 @@
 #!/bin/sh
 
-brew update
-brew upgrade
 brew install libsndfile
 brew install portaudio
 brew install liblo
@@ -53,6 +51,8 @@ export PACKAGE_NAME=csound${CS_VERSION}-MacOS_x86_64.pkg
 export DMG_DIR="Csound${CS_VERSION}"
 export DMG_NAME="csound${CS_VERSION}-MacOS_x86_64.dmg"
 
+export CPATH='/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include:/opt/local/include'
+export LIBRARY_PATH='/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib:/opt/local/lib'
 
 # xcode-select --install    # install command line tools and headers.
 export SDK=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/

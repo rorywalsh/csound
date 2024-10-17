@@ -1,7 +1,7 @@
 #!/bin/sh
 git clone https://github.com/libsndfile/libsndfile.git
 cd libsndfile
-mkdir build && cd build
+mkdir build && cd build 
 cmake -G Xcode -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.11 -DENABLE_MPEG=0 -DENABLE_EXTERNAL_LIBS=OFF -DBUILD_SHARED_LIBS=OFF ..
 echo "========================== Creating iphone lib =========================="
 xcodebuild -sdk iphoneos -xcconfig ../../device.xcconfig -target sndfile -configuration Release -verbose

@@ -6,80 +6,77 @@ env:
 
 on:
   push:
-    branches:
-      - master
-      - develop
   pull_request:
     branches:
       - develop
 
 jobs:
-  linux_build:
-    name: Linux/Ubuntu build (apt-get)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Source Code
-        uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
+  # linux_build:
+  #   name: Linux/Ubuntu build (apt-get)
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout Source Code
+  #       uses: actions/checkout@v1
+  #       with:
+  #         fetch-depth: 1
 
-      - name: Install Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install cmake libgtest-dev libsndfile1-dev libasound2-dev libjack-dev portaudio19-dev libportmidi-dev libpulse-dev swig liblua5.1-0-dev default-jdk libfltk1.1-dev libfluidsynth-dev liblo-dev fluid ladspa-sdk libpng-dev dssi-dev libstk0-dev libgmm++-dev bison flex libportsmf-dev libeigen3-dev libcunit1-dev gettext libsamplerate0-dev
+  #     - name: Install Dependencies
+  #       run: |
+  #         sudo apt-get update
+  #         sudo apt-get install cmake libgtest-dev libsndfile1-dev libasound2-dev libjack-dev portaudio19-dev libportmidi-dev libpulse-dev swig liblua5.1-0-dev default-jdk libfltk1.1-dev libfluidsynth-dev liblo-dev fluid ladspa-sdk libpng-dev dssi-dev libstk0-dev libgmm++-dev bison flex libportsmf-dev libeigen3-dev libcunit1-dev gettext libsamplerate0-dev
 
-      - name: Configure build
-        run: |
-          mkdir build
-          cd build
-          cmake .. -DUSE_MP3=0 -DBUILD_TESTS=1 -DBUILD_STATIC_LIBRARY=1
+  #     - name: Configure build
+  #       run: |
+  #         mkdir build
+  #         cd build
+  #         cmake .. -DUSE_MP3=0 -DBUILD_TESTS=1 -DBUILD_STATIC_LIBRARY=1
 
-      - name: Build Csound
-        run: |
-          cd build
-          make
+  #     - name: Build Csound
+  #       run: |
+  #         cd build
+  #         make
 
-      - name: Run tests
-        run: |
-          cd build
-          make test
-          make csdtests
+  #     - name: Run tests
+  #       run: |
+  #         cd build
+  #         make test
+  #         make csdtests
 
-  linux_build_vcpkg:
-    name: Linux/Ubuntu build (vcpkg)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
-          submodules: true
+  # linux_build_vcpkg:
+  #   name: Linux/Ubuntu build (vcpkg)
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout source code
+  #       uses: actions/checkout@v1
+  #       with:
+  #         fetch-depth: 1
+  #         submodules: true
 
-      - uses: lukka/get-cmake@v3.29.0
+  #     - uses: lukka/get-cmake@v3.29.0
 
-      - name: Export GitHub Actions cache environment variables
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+  #     - name: Export GitHub Actions cache environment variables
+  #       uses: actions/github-script@v6
+  #       with:
+  #         script: |
+  #           core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+  #           core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
 
-      - name: Bootstrap VCPKG
-        run: ./vcpkg/bootstrap-vcpkg.sh
+  #     - name: Bootstrap VCPKG
+  #       run: ./vcpkg/bootstrap-vcpkg.sh
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install cmake libjack-dev libpulse-dev ladspa-sdk dssi-dev autoconf libtool
+  #     - name: Install dependencies
+  #       run: |
+  #         sudo apt-get update
+  #         sudo apt-get install cmake libjack-dev libpulse-dev ladspa-sdk dssi-dev autoconf libtool
 
-      - name: Configure Build
-        run: cmake -B build -S . -DBUILD_TESTS=1 -DUSE_VCPKG=1 -DCUSTOM_CMAKE="./platform/linux/custom.cmake" -DBUILD_PLUGINS=1
+  #     - name: Configure Build
+  #       run: cmake -B build -S . -DBUILD_TESTS=1 -DUSE_VCPKG=1 -DCUSTOM_CMAKE="./platform/linux/custom.cmake" -DBUILD_PLUGINS=1
 
-      - name: Build Csound
-        run: cmake --build build --config Release
+  #     - name: Build Csound
+  #       run: cmake --build build --config Release
 
-      - name: Run integration and unit tests
-        run: cmake --build build --target test csdtests
+  #     - name: Run integration and unit tests
+  #       run: cmake --build build --target test csdtests
 
   iOS_build:
     name: iOS build
@@ -116,409 +113,409 @@ jobs:
           name: iOS-builds
           path: iOS/csound-iOS-${{env.CSOUND_VERSION}}
 
-  macos_build_brew:
-    name: MacOS build (brew)
-    runs-on: macos-latest
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
-          submodules: true
+  # macos_build_brew:
+  #   name: MacOS build (brew)
+  #   runs-on: macos-latest
+  #   steps:
+  #     - name: Checkout source code
+  #       uses: actions/checkout@v1
+  #       with:
+  #         fetch-depth: 1
+  #         submodules: true
 
-      - name: Install dependencies
-        run: |
-          brew install --only-dependencies csound
-          brew install bison flex jack googletest
+  #     - name: Install dependencies
+  #       run: |
+  #         brew install --only-dependencies csound
+  #         brew install bison flex jack googletest
 
-      - name: Configure build
-        run: cmake -B build -DBUILD_TESTS=1 -DCUSTOM_CMAKE="./platform/osx/custom-osx.cmake"
-      - name: Build Csound
-        run: cmake --build build --config Release
+  #     - name: Configure build
+  #       run: cmake -B build -DBUILD_TESTS=1 -DCUSTOM_CMAKE="./platform/osx/custom-osx.cmake"
+  #     - name: Build Csound
+  #       run: cmake --build build --config Release
 
-      - name: Run integration and unit tests
-        run: cmake --build build --target test csdtests
+  #     - name: Run integration and unit tests
+  #       run: cmake --build build --target test csdtests
 
-  macos_build_vanilla:
-    name: MacOS build (vanilla)
-    runs-on: macos-latest
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
-          submodules: true
+  # macos_build_vanilla:
+  #   name: MacOS build (vanilla)
+  #   runs-on: macos-latest
+  #   steps:
+  #     - name: Checkout source code
+  #       uses: actions/checkout@v1
+  #       with:
+  #         fetch-depth: 1
+  #         submodules: true
           
-      - name: Checkout and build libsndfile, configure Csound
-        run: |
-           git clone https://github.com/libsndfile/libsndfile
-           cd libsndfile
-           cmake -B build -DENABLE_EXTERNAL_LIBS=0 -DENABLE_MPEG=0 -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_INSTALL_PREFIX=../sndfile_install
-           cmake --build build
-           cmake --build build --target install
-           cd ..
-           brew install bison flex
-           cmake -B build -DUSE_GETTEXT=0 -DCMAKE_PREFIX_PATH="$PWD/sndfile_install" -DCMAKE_INSTALL_PREFIX="$PWD/csound_install" -DCS_FRAMEWORK_DEST="$PWD/csound_install" -DCS_OPCODE_DIR="/Applications/Csound/CsoundLib64.framework/Resources/Opcodes64/" -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+  #     - name: Checkout and build libsndfile, configure Csound
+  #       run: |
+  #          git clone https://github.com/libsndfile/libsndfile
+  #          cd libsndfile
+  #          cmake -B build -DENABLE_EXTERNAL_LIBS=0 -DENABLE_MPEG=0 -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_INSTALL_PREFIX=../sndfile_install
+  #          cmake --build build
+  #          cmake --build build --target install
+  #          cd ..
+  #          brew install bison flex
+  #          cmake -B build -DUSE_GETTEXT=0 -DCMAKE_PREFIX_PATH="$PWD/sndfile_install" -DCMAKE_INSTALL_PREFIX="$PWD/csound_install" -DCS_FRAMEWORK_DEST="$PWD/csound_install" -DCS_OPCODE_DIR="/Applications/Csound/CsoundLib64.framework/Resources/Opcodes64/" -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
            
-      - name: Build Csound
-        run: |
-          cmake --build build --config Release
-          cmake --build build --target install
+  #     - name: Build Csound
+  #       run: |
+  #         cmake --build build --config Release
+  #         cmake --build build --target install
     
-      - name: Adjust link paths
-        run: |
-           install_name_tool -id /Applications/Csound/CsoundLib64.framework/CsoundLib64 csound_install/CsoundLib64.framework/CsoundLib64
-           install_name_tool -delete_rpath /Users/runner/work/csound/csound/csound_install csound_install/CsoundLib64.framework/CsoundLib64
-           install_name_tool -change @rpath/CsoundLib64.framework/Versions/7.0/CsoundLib64 /Applications/Csound/CsoundLib64.framework/Versions/7.0/CsoundLib64 csound_install/bin/csound
+  #     - name: Adjust link paths
+  #       run: |
+  #          install_name_tool -id /Applications/Csound/CsoundLib64.framework/CsoundLib64 csound_install/CsoundLib64.framework/CsoundLib64
+  #          install_name_tool -delete_rpath /Users/runner/work/csound/csound/csound_install csound_install/CsoundLib64.framework/CsoundLib64
+  #          install_name_tool -change @rpath/CsoundLib64.framework/Versions/7.0/CsoundLib64 /Applications/Csound/CsoundLib64.framework/Versions/7.0/CsoundLib64 csound_install/bin/csound
            
-      - name: Build installer
-        run: |
-           mkdir -p csound_install/PkgContents/Applications/Csound
-           mv csound_install/bin/csound csound_install/PkgContents/Applications/Csound/.
-           mv csound_install/CsoundLib64.framework csound_install/PkgContents/Applications/Csound/.
-           pkgbuild --identifier com.csound.csound6Environment.csoundLib64 --root csound_install/PkgContents CsoundLib64-7.0-vanilla-universal.pkg
+  #     - name: Build installer
+  #       run: |
+  #          mkdir -p csound_install/PkgContents/Applications/Csound
+  #          mv csound_install/bin/csound csound_install/PkgContents/Applications/Csound/.
+  #          mv csound_install/CsoundLib64.framework csound_install/PkgContents/Applications/Csound/.
+  #          pkgbuild --identifier com.csound.csound6Environment.csoundLib64 --root csound_install/PkgContents CsoundLib64-7.0-vanilla-universal.pkg
 
-      - name: Upload zip
-        if: github.ref == 'refs/heads/develop'
-        uses: actions/upload-artifact@v4      
-        with:
-          name: csound-${{env.CSOUND_VERSION}}-${{github.run_number}}-macosx-vanilla
-          path: ./CsoundLib64-7.0-vanilla-universal.pkg        
+  #     - name: Upload zip
+  #       if: github.ref == 'refs/heads/develop'
+  #       uses: actions/upload-artifact@v4      
+  #       with:
+  #         name: csound-${{env.CSOUND_VERSION}}-${{github.run_number}}-macosx-vanilla
+  #         path: ./CsoundLib64-7.0-vanilla-universal.pkg        
             
-  macos_build_vcpkg:
-    name: MacOS build (vcpkg)
-    runs-on: macos-latest
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
-          submodules: true
+  # macos_build_vcpkg:
+  #   name: MacOS build (vcpkg)
+  #   runs-on: macos-latest
+  #   steps:
+  #     - name: Checkout source code
+  #       uses: actions/checkout@v1
+  #       with:
+  #         fetch-depth: 1
+  #         submodules: true
 
-      - uses: lukka/get-cmake@v3.29.0
+  #     - uses: lukka/get-cmake@v3.29.0
 
-      - name: Export GitHub Actions cache environment variables
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+  #     - name: Export GitHub Actions cache environment variables
+  #       uses: actions/github-script@v6
+  #       with:
+  #         script: |
+  #           core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+  #           core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
 
-      - name: Bootstrap VCPKG
-        run: ./vcpkg/bootstrap-vcpkg.sh
+  #     - name: Bootstrap VCPKG
+  #       run: ./vcpkg/bootstrap-vcpkg.sh
 
-      - name: Install dependencies
-        run: brew install bison flex
+  #     - name: Install dependencies
+  #       run: brew install bison flex
 
-      - name: Configure build
-        run: cmake -B build -S . -DBUILD_TESTS=1 -DUSE_VCPKG=1 -DCUSTOM_CMAKE="./platform/osx/custom-osx.cmake"
+  #     - name: Configure build
+  #       run: cmake -B build -S . -DBUILD_TESTS=1 -DUSE_VCPKG=1 -DCUSTOM_CMAKE="./platform/osx/custom-osx.cmake"
 
-      - name: Build Csound
-        run: cmake --build build --config Release
+  #     - name: Build Csound
+  #       run: cmake --build build --config Release
 
-      - name: Run integration and unit tests
-        run: cmake --build build --target test csdtests
+  #     - name: Run integration and unit tests
+  #       run: cmake --build build --target test csdtests
 
-  macos_build_vcpkg_arm64:
-    name: MacOS build (vcpkg arm64)
-    runs-on: macos-latest
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
-          submodules: true
+  # macos_build_vcpkg_arm64:
+  #   name: MacOS build (vcpkg arm64)
+  #   runs-on: macos-latest
+  #   steps:
+  #     - name: Checkout source code
+  #       uses: actions/checkout@v1
+  #       with:
+  #         fetch-depth: 1
+  #         submodules: true
 
-      - uses: lukka/get-cmake@v3.29.0
+  #     - uses: lukka/get-cmake@v3.29.0
 
-      - name: Export GitHub Actions cache environment variables
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+  #     - name: Export GitHub Actions cache environment variables
+  #       uses: actions/github-script@v6
+  #       with:
+  #         script: |
+  #           core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+  #           core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
 
-      - name: Bootstrap VCPKG
-        run: ./vcpkg/bootstrap-vcpkg.sh
+  #     - name: Bootstrap VCPKG
+  #       run: ./vcpkg/bootstrap-vcpkg.sh
 
-      - name: Install dependencies
-        run: brew install bison flex
+  #     - name: Install dependencies
+  #       run: brew install bison flex
 
-      - name: Configure build
-        run: cmake -B build -S . -DBUILD_TESTS=1 -DUSE_VCPKG=1 -DCUSTOM_CMAKE="./platform/osx/custom-osx.cmake"
+  #     - name: Configure build
+  #       run: cmake -B build -S . -DBUILD_TESTS=1 -DUSE_VCPKG=1 -DCUSTOM_CMAKE="./platform/osx/custom-osx.cmake"
 
-      - name: Build Csound
-        run: cmake --build build --config Release
+  #     - name: Build Csound
+  #       run: cmake --build build --config Release
 
-      - name: Run integration and unit tests
-        run: cmake --build build --target test csdtests
+  #     - name: Run integration and unit tests
+  #       run: cmake --build build --target test csdtests
 
-  macos_build_osxcross:
-    name: MacOS build (osxcross/vcpkg)
-    if: github.ref == 'refs/heads/develop' || vars.ENABLE_CROSS_COMPILERS == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
-          submodules: true
+  # macos_build_osxcross:
+  #   name: MacOS build (osxcross/vcpkg)
+  #   if: github.ref == 'refs/heads/develop' || vars.ENABLE_CROSS_COMPILERS == 'true'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout source code
+  #       uses: actions/checkout@v1
+  #       with:
+  #         fetch-depth: 1
+  #         submodules: true
 
-      - uses: lukka/get-cmake@v3.29.0
+  #     - uses: lukka/get-cmake@v3.29.0
 
-      - name: Export GitHub Actions cache environment variables
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+  #     - name: Export GitHub Actions cache environment variables
+  #       uses: actions/github-script@v6
+  #       with:
+  #         script: |
+  #           core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+  #           core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
 
-      - name: Bootstrap VCPKG
-        run: ./vcpkg/bootstrap-vcpkg.sh
+  #     - name: Bootstrap VCPKG
+  #       run: ./vcpkg/bootstrap-vcpkg.sh
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install build-essential liblzma-dev libxml2-dev libz-dev libbz2-dev cpio ninja-build
+  #     - name: Install dependencies
+  #       run: |
+  #         sudo apt-get update
+  #         sudo apt-get install build-essential liblzma-dev libxml2-dev libz-dev libbz2-dev cpio ninja-build
 
-      - name: Download osxcross
-        run: |
-          curl -L "https://drive.usercontent.google.com/download?id=1bDCZNjj5FPIuE0FzJv_4aw78Xgbp4wsH&confirm=xxx" | tar xvz
+  #     - name: Download osxcross
+  #       run: |
+  #         curl -L "https://drive.usercontent.google.com/download?id=1bDCZNjj5FPIuE0FzJv_4aw78Xgbp4wsH&confirm=xxx" | tar xvz
 
-      - name: Configure Build
-        run: |
-          $(eval /home/runner/work/csound/csound/osxcross/tools/osxcross_conf.sh)
-          for ARCH in x86_64 arm64; do
-              cmake -B build/$ARCH -S . -DUSE_VCPKG=1 -DCUSTOM_CMAKE=./platform/osxcross/custom-osx.cmake \
-                  -DCMAKE_SYSTEM_NAME=Darwin \
-                  -DOSXCROSS_TARGET_DIR=${OSXCROSS_TARGET_DIR} \
-                  -DOSXCROSS_SDK=${OSXCROSS_SDK} \
-                  -DOSXCROSS_TARGET=${OSXCROSS_TARGET} \
-                  -DCMAKE_OSX_ARCHITECTURES=${ARCH}
-          done
+  #     - name: Configure Build
+  #       run: |
+  #         $(eval /home/runner/work/csound/csound/osxcross/tools/osxcross_conf.sh)
+  #         for ARCH in x86_64 arm64; do
+  #             cmake -B build/$ARCH -S . -DUSE_VCPKG=1 -DCUSTOM_CMAKE=./platform/osxcross/custom-osx.cmake \
+  #                 -DCMAKE_SYSTEM_NAME=Darwin \
+  #                 -DOSXCROSS_TARGET_DIR=${OSXCROSS_TARGET_DIR} \
+  #                 -DOSXCROSS_SDK=${OSXCROSS_SDK} \
+  #                 -DOSXCROSS_TARGET=${OSXCROSS_TARGET} \
+  #                 -DCMAKE_OSX_ARCHITECTURES=${ARCH}
+  #         done
 
-      - name: Build Csound
-        run: |
-          $(eval /home/runner/work/csound/csound/osxcross/tools/osxcross_conf.sh)
-          for ARCH in x86_64 arm64; do
-            cmake --build build/$ARCH --config Release
-          done
+  #     - name: Build Csound
+  #       run: |
+  #         $(eval /home/runner/work/csound/csound/osxcross/tools/osxcross_conf.sh)
+  #         for ARCH in x86_64 arm64; do
+  #           cmake --build build/$ARCH --config Release
+  #         done
 
-  windows_build:
-    name: Windows build (vcpkg)
-    runs-on: windows-latest
-    steps:
-      - name: Checkout Source Code
-        uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
-          submodules: true
+  # windows_build:
+  #   name: Windows build (vcpkg)
+  #   runs-on: windows-latest
+  #   steps:
+  #     - name: Checkout Source Code
+  #       uses: actions/checkout@v1
+  #       with:
+  #         fetch-depth: 1
+  #         submodules: true
 
-      - uses: lukka/get-cmake@v3.29.0
+  #     - uses: lukka/get-cmake@v3.29.0
 
-      - name: Export GitHub Actions cache environment variables
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+  #     - name: Export GitHub Actions cache environment variables
+  #       uses: actions/github-script@v6
+  #       with:
+  #         script: |
+  #           core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+  #           core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
 
-      - name: Install system dependencies
-        run: |
-          choco install -y winflexbison3 innosetup
+  #     - name: Install system dependencies
+  #       run: |
+  #         choco install -y winflexbison3 innosetup
 
-      - name: Bootstrap VCPKG
-        run: .\vcpkg\bootstrap-vcpkg.bat
+  #     - name: Bootstrap VCPKG
+  #       run: .\vcpkg\bootstrap-vcpkg.bat
 
-      - name: Configure build
-        run: cmake -B build -S . -DBUILD_TESTS=1 -DUSE_VCPKG=1 -DCUSTOM_CMAKE="./platform/windows/Custom-vs.cmake"
+  #     - name: Configure build
+  #       run: cmake -B build -S . -DBUILD_TESTS=1 -DUSE_VCPKG=1 -DCUSTOM_CMAKE="./platform/windows/Custom-vs.cmake"
 
-      - name: Build Csound
-        run: cmake --build build --config Release
+  #     - name: Build Csound
+  #       run: cmake --build build --config Release
 
-      - name: Run tests
-        run: cmake --build build --target csdtests
+  #     - name: Run tests
+  #       run: cmake --build build --target csdtests
 
-      - name: Run unit test framework
-        run: cmake --build build --target RUN_TESTS --config Release
+  #     - name: Run unit test framework
+  #       run: cmake --build build --target RUN_TESTS --config Release
 
-      - name: Acquire Csound manual
-        if: github.ref == 'refs/heads/develop'
-        shell: powershell
-        run: |
-          Invoke-WebRequest -Uri "https://github.com/csound/manual/releases/download/6.18.0/Csound6.18.0_manual_html.zip" -OutFile "./manual.zip"
-          7z x manual.zip
+  #     - name: Acquire Csound manual
+  #       if: github.ref == 'refs/heads/develop'
+  #       shell: powershell
+  #       run: |
+  #         Invoke-WebRequest -Uri "https://github.com/csound/manual/releases/download/6.18.0/Csound6.18.0_manual_html.zip" -OutFile "./manual.zip"
+  #         7z x manual.zip
 
-      - name: Build installer
-        if: github.ref == 'refs/heads/develop'
-        shell: powershell
-        run: |
-          $Env:RedistVersion=Get-Content "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\Microsoft.VCRedistVersion.default.txt"
-          $Env:VCREDIST_CRT_DIR="C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\MSVC\${Env:RedistVersion}\x64\Microsoft.VC143.CRT"
-          $Env:VCREDIST_CXXAMP_DIR="C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\MSVC\${Env:RedistVersion}\x64\Microsoft.VC143.CXXAMP"
-          $Env:VCREDIST_OPENMP_DIR="C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\MSVC\${Env:RedistVersion}\x64\Microsoft.VC143.OpenMP"
-          iscc /o. installer\\windows\\csound7_x64_github.iss
+  #     - name: Build installer
+  #       if: github.ref == 'refs/heads/develop'
+  #       shell: powershell
+  #       run: |
+  #         $Env:RedistVersion=Get-Content "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\Microsoft.VCRedistVersion.default.txt"
+  #         $Env:VCREDIST_CRT_DIR="C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\MSVC\${Env:RedistVersion}\x64\Microsoft.VC143.CRT"
+  #         $Env:VCREDIST_CXXAMP_DIR="C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\MSVC\${Env:RedistVersion}\x64\Microsoft.VC143.CXXAMP"
+  #         $Env:VCREDIST_OPENMP_DIR="C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\MSVC\${Env:RedistVersion}\x64\Microsoft.VC143.OpenMP"
+  #         iscc /o. installer\\windows\\csound7_x64_github.iss
 
-      - name: Upload installer
-        if: github.ref == 'refs/heads/develop'
-        uses: actions/upload-artifact@v4
-        with:
-          name: Csound_x64-${{env.CSOUND_VERSION}}.${{github.run_number}}-windows-x64-installer
-          path: ./Csound7-windows_x86_64-*.exe
-          if-no-files-found: error
+  #     - name: Upload installer
+  #       if: github.ref == 'refs/heads/develop'
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: Csound_x64-${{env.CSOUND_VERSION}}.${{github.run_number}}-windows-x64-installer
+  #         path: ./Csound7-windows_x86_64-*.exe
+  #         if-no-files-found: error
 
-      - name: Upload zip
-        if: github.ref == 'refs/heads/develop'
-        uses: actions/upload-artifact@v4
-        with:
-          name: csound-${{env.CSOUND_VERSION}}-${{github.run_number}}-windows-x64-binaries
-          path: |
-            ./build/Release/*.exe
-            ./build/Release/*.dll
-            ./build/Release/*.pyd
-            ./build/Release/csound64.lib
-            ./build/*.jar
-            ./build/*.py
-            ./include/
-          if-no-files-found: error
+  #     - name: Upload zip
+  #       if: github.ref == 'refs/heads/develop'
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: csound-${{env.CSOUND_VERSION}}-${{github.run_number}}-windows-x64-binaries
+  #         path: |
+  #           ./build/Release/*.exe
+  #           ./build/Release/*.dll
+  #           ./build/Release/*.pyd
+  #           ./build/Release/csound64.lib
+  #           ./build/*.jar
+  #           ./build/*.py
+  #           ./include/
+  #         if-no-files-found: error
 
-  windows_build_mingw:
-    name: Windows build (mingw/vcpkg)
-    if: github.ref == 'refs/heads/develop' || vars.ENABLE_CROSS_COMPILERS == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
-          submodules: true
+  # windows_build_mingw:
+  #   name: Windows build (mingw/vcpkg)
+  #   if: github.ref == 'refs/heads/develop' || vars.ENABLE_CROSS_COMPILERS == 'true'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout source code
+  #       uses: actions/checkout@v1
+  #       with:
+  #         fetch-depth: 1
+  #         submodules: true
 
-      - uses: lukka/get-cmake@v3.29.0
+  #     - uses: lukka/get-cmake@v3.29.0
 
-      - name: Export GitHub Actions cache environment variables
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+  #     - name: Export GitHub Actions cache environment variables
+  #       uses: actions/github-script@v6
+  #       with:
+  #         script: |
+  #           core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+  #           core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
 
-      - name: Bootstrap VCPKG
-        run: ./vcpkg/bootstrap-vcpkg.sh
+  #     - name: Bootstrap VCPKG
+  #       run: ./vcpkg/bootstrap-vcpkg.sh
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install mingw-w64-x86-64-dev gcc-mingw-w64 g++-mingw-w64 mingw-w64-tools wine
+  #     - name: Install dependencies
+  #       run: |
+  #         sudo apt-get update
+  #         sudo apt-get install mingw-w64-x86-64-dev gcc-mingw-w64 g++-mingw-w64 mingw-w64-tools wine
 
-      - name: Use posix mingw
-        run: |
-          sudo update-alternatives --set x86_64-w64-mingw32-gcc /usr/bin/x86_64-w64-mingw32-gcc-posix
-          sudo update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
+  #     - name: Use posix mingw
+  #       run: |
+  #         sudo update-alternatives --set x86_64-w64-mingw32-gcc /usr/bin/x86_64-w64-mingw32-gcc-posix
+  #         sudo update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
 
-      - name: Configure Build
-        run: cmake -B build -S . -DBUILD_TESTS=1 -DUSE_VCPKG=1 -DCUSTOM_CMAKE="./platform/mingw64-linux/Custom.cmake" -DCMAKE_SYSTEM_NAME=MinGW
+  #     - name: Configure Build
+  #       run: cmake -B build -S . -DBUILD_TESTS=1 -DUSE_VCPKG=1 -DCUSTOM_CMAKE="./platform/mingw64-linux/Custom.cmake" -DCMAKE_SYSTEM_NAME=MinGW
 
-      - name: Build Csound
-        run: cmake --build build --config Release
+  #     - name: Build Csound
+  #       run: cmake --build build --config Release
 
-      - name: Run integration and unit tests
-        run: cmake --build build --target test csdtests
+  #     - name: Run integration and unit tests
+  #       run: cmake --build build --target test csdtests
 
-  android_build_vcpkg:
-    name: Android build (vcpkg)
-    if: vars.ANDROID_WORKFLOW_RUN_ID
-    runs-on: ubuntu-latest
-    env:
-      VERSION: v1
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
-          submodules: true
+  # android_build_vcpkg:
+  #   name: Android build (vcpkg)
+  #   if: vars.ANDROID_WORKFLOW_RUN_ID
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     VERSION: v1
+  #   steps:
+  #     - name: Checkout source code
+  #       uses: actions/checkout@v1
+  #       with:
+  #         fetch-depth: 1
+  #         submodules: true
 
-      - uses: lukka/get-cmake@v3.29.0
+  #     - uses: lukka/get-cmake@v3.29.0
 
-      - name: Export GitHub Actions cache environment variables
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+  #     - name: Export GitHub Actions cache environment variables
+  #       uses: actions/github-script@v6
+  #       with:
+  #         script: |
+  #           core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+  #           core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
 
-      - name: Bootstrap VCPKG
-        run: ./vcpkg/bootstrap-vcpkg.sh
+  #     - name: Bootstrap VCPKG
+  #       run: ./vcpkg/bootstrap-vcpkg.sh
 
-      - name: Download image
-        uses: actions/download-artifact@v4
-        with:
-          name: csound-android-${{ env.VERSION }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          run-id: ${{ vars.ANDROID_WORKFLOW_RUN_ID }}
+  #     - name: Download image
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: csound-android-${{ env.VERSION }}
+  #         github-token: ${{ secrets.GITHUB_TOKEN }}
+  #         run-id: ${{ vars.ANDROID_WORKFLOW_RUN_ID }}
 
-      - name: Load image
-        run: |
-          docker load --input csound-android-${{ env.VERSION }}.tar
-          rm csound-android-${{ env.VERSION }}.tar
+  #     - name: Load image
+  #       run: |
+  #         docker load --input csound-android-${{ env.VERSION }}.tar
+  #         rm csound-android-${{ env.VERSION }}.tar
 
-      - name: Configure Build
-        uses: addnab/docker-run-action@v3
-        with:
-          image: csound-android:${{ env.VERSION }}
-          options: -v ${{ github.workspace }}:${{ github.workspace }} --workdir ${{ github.workspace }}
-          run: |
-            for ARCH in arm arm64 x86 x64; do
-                cmake -B build/$ARCH -S . -DUSE_VCPKG=1 -DCUSTOM_CMAKE=./platform/android/custom-android.cmake \
-                    -DCMAKE_SYSTEM_NAME=Android \
-                    -DANDROID=1 \
-                    -DCMAKE_TARGET_ARCHITECTURE=${ARCH}
-            done
+  #     - name: Configure Build
+  #       uses: addnab/docker-run-action@v3
+  #       with:
+  #         image: csound-android:${{ env.VERSION }}
+  #         options: -v ${{ github.workspace }}:${{ github.workspace }} --workdir ${{ github.workspace }}
+  #         run: |
+  #           for ARCH in arm arm64 x86 x64; do
+  #               cmake -B build/$ARCH -S . -DUSE_VCPKG=1 -DCUSTOM_CMAKE=./platform/android/custom-android.cmake \
+  #                   -DCMAKE_SYSTEM_NAME=Android \
+  #                   -DANDROID=1 \
+  #                   -DCMAKE_TARGET_ARCHITECTURE=${ARCH}
+  #           done
 
-      - name: Build Csound
-        uses: addnab/docker-run-action@v3
-        with:
-          image: csound-android:${{ env.VERSION }}
-          options: -v ${{ github.workspace }}:${{ github.workspace }} --workdir ${{ github.workspace }}
-          run: |
-            for ARCH in arm arm64 x86 x64; do
-              cmake --build build/$ARCH --config Release
-            done
+  #     - name: Build Csound
+  #       uses: addnab/docker-run-action@v3
+  #       with:
+  #         image: csound-android:${{ env.VERSION }}
+  #         options: -v ${{ github.workspace }}:${{ github.workspace }} --workdir ${{ github.workspace }}
+  #         run: |
+  #           for ARCH in arm arm64 x86 x64; do
+  #             cmake --build build/$ARCH --config Release
+  #           done
 
-  wasm_build:
-    name: Wasm build (emscripten/vcpkg)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
-          submodules: true
+  # wasm_build:
+  #   name: Wasm build (emscripten/vcpkg)
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout source code
+  #       uses: actions/checkout@v1
+  #       with:
+  #         fetch-depth: 1
+  #         submodules: true
 
-      - name: Export GitHub Actions cache environment variables
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+  #     - name: Export GitHub Actions cache environment variables
+  #       uses: actions/github-script@v6
+  #       with:
+  #         script: |
+  #           core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+  #           core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
 
-      - name: Bootstrap VCPKG
-        run: ./vcpkg/bootstrap-vcpkg.sh
+  #     - name: Bootstrap VCPKG
+  #       run: ./vcpkg/bootstrap-vcpkg.sh
 
-      - name: Set up Emscripten
-        uses: mymindstorm/setup-emsdk@v14
-        with:
-          version: 3.1.64
-          actions-cache-folder: emsdk-cache
+  #     - name: Set up Emscripten
+  #       uses: mymindstorm/setup-emsdk@v14
+  #       with:
+  #         version: 3.1.64
+  #         actions-cache-folder: emsdk-cache
 
-      - name: Configure Build
-        run: |
-          cmake -B build -S . -DUSE_VCPKG=1 -DCUSTOM_CMAKE="./platform/wasm/Custom-wasm.cmake" -DCMAKE_SYSTEM_NAME=Emscripten -DEMSDK=$EMSDK -DEMSDK_NODE=$EMSDK_NODE
+  #     - name: Configure Build
+  #       run: |
+  #         cmake -B build -S . -DUSE_VCPKG=1 -DCUSTOM_CMAKE="./platform/wasm/Custom-wasm.cmake" -DCMAKE_SYSTEM_NAME=Emscripten -DEMSDK=$EMSDK -DEMSDK_NODE=$EMSDK_NODE
 
-      - name: Build Csound
-        run: cmake --build build --config Release
+  #     - name: Build Csound
+  #       run: cmake --build build --config Release
 
-      - name: Run integration and unit tests
-        run: cmake --build build --target test csdtests
+  #     - name: Run integration and unit tests
+  #       run: cmake --build build --target test csdtests
 
   #android_build:
   #  name: Android build

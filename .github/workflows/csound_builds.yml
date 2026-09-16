@@ -970,7 +970,7 @@ jobs:
 
       - name: Build installer
 #        if: github.ref == 'refs/heads/develop'
-        shell: powershell
+        shell: pwsh
         run: |
           $vsPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
           $redistVersion = (Get-Content "$vsPath\VC\Auxiliary\Build\Microsoft.VCRedistVersion.default.txt").Trim()
@@ -1062,7 +1062,7 @@ jobs:
 
       - name: Build installer
 #        if: github.ref == 'refs/heads/develop'
-        shell: powershell
+        shell: pwsh
         run: |
           $vsPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
           $redistVersion = (Get-Content "$vsPath\VC\Auxiliary\Build\Microsoft.VCRedistVersion.default.txt").Trim()
